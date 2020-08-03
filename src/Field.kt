@@ -10,7 +10,7 @@ class Field(private var height: Int, private var width: Int, private var countOf
     fun buildField() {
         for (i in arrayOfCell.indices)
             for (j in arrayOfCell[i].indices) {
-                arrayOfCell[i][j] = NumberCell(j + 1, i + 1)
+                arrayOfCell[i][j] = NonMineCell(j + 1, i + 1)
             }
         for (i in minePos.indices) {
             val posX = minePos[i][0]
@@ -21,10 +21,18 @@ class Field(private var height: Int, private var width: Int, private var countOf
     }
 
     fun printField() {
+        print(" |")
+        for (i in 1..width) {
+            print("$i")
+        }
+        print("|")
+        println()
         for (i in 0 until height) {
+            print("${i+1}|")
             for (j in 0 until width) {
                 print(arrayOfCell[i][j].value)
             }
+            print("|")
             println()
         }
     }
@@ -34,7 +42,7 @@ class Field(private var height: Int, private var width: Int, private var countOf
             for (j in arrayOfCell[i].indices) {
                 val cell = arrayOfCell[i][j]
                 var count = 0
-                if (cell is NumberCell) {
+                if (cell is NonMineCell) {
                     val x = j + 1
                     val y = i + 1
                     val leftMine = if (x - 1 == 0) '0' else arrayOfCell[i][j - 1]

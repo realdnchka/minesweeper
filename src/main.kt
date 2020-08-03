@@ -11,19 +11,23 @@ fun main() {
     checkCell(field, countOfMines, 0)
 }
 
+fun openCell(field: Field) {
+
+}
+
+
 fun checkCell(field: Field, COM: Int, CONM: Int) {
-    val scanner = Scanner(System.`in`)
     var countOfMines = COM
     var countOfNonMines = CONM
-    print("Fill cords X and Y > ")
-    val posX = scanner.nextInt()
-    val posY = scanner.nextInt()
-    val cell = field.getCell(posX, posY)
-
     if (countOfMines == 0 && countOfNonMines == 0) {
         println("You won!")
     } else {
-        if (cell is NumberCell) {
+        val scanner = Scanner(System.`in`)
+        print("Fill cords X and Y > ")
+        val posX = scanner.nextInt()
+        val posY = scanner.nextInt()
+        val cell = field.getCell(posX, posY)
+        if (cell is NonMineCell) {
             if (cell.value == '.' || cell.value == '*') {
                 cell.check()
                 countOfNonMines += 1
