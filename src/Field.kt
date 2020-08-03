@@ -1,6 +1,6 @@
-class Field(private var height: Int, private var width: Int, private var countOfMines: Int) {
+class Field(private var height: Int, private var width: Int, private var countOfMines: Int, startPosX: Int, startPosY: Int) {
 
-    private val minePos = getMinePos()
+    private val minePos = getMinePos(startPosX, startPosY)
     private val arrayOfCell: Array<Array<Cell>> = Array(height) { Array(width) { Cell(1, 1) } }
 
     fun getCell(x: Int, y: Int): Cell {
@@ -8,16 +8,25 @@ class Field(private var height: Int, private var width: Int, private var countOf
     }
 
     fun buildField() {
-        for (i in arrayOfCell.indices)
+        for (i in arrayOfCell.indices) {
             for (j in arrayOfCell[i].indices) {
                 arrayOfCell[i][j] = NonMineCell(j + 1, i + 1)
             }
+        }
         for (i in minePos.indices) {
             val posX = minePos[i][0]
             val posY = minePos[i][1]
             arrayOfCell[posY - 1][posX - 1] = MineCell(posX, posY)
         }
         minesAround()
+        for (i in arrayOfCell.indices) {
+            for (j in arrayOfCell[i].indices) {
+                val cell = arrayOfCell[i][j]
+                if (cell.value == cell.defaultChar && cell !is MineCell) {
+                    arrayOfCell[i][j] = EmptyCell(j + 1, i + 1)
+                }
+            }
+        }
     }
 
     fun printField() {
@@ -78,7 +87,7 @@ class Field(private var height: Int, private var width: Int, private var countOf
         }
     }
 
-    private fun getMinePos(): Array<IntArray> {
+    private fun getMinePos(startPosX: Int, startPosY: Int): Array<IntArray> {
         val array = Array(countOfMines) { IntArray(2) { 0 } }
         for (i in array.indices) {
             while (array[i][0] == 0 && array[i][1] == 0) {
@@ -86,7 +95,7 @@ class Field(private var height: Int, private var width: Int, private var countOf
                 val randomY = (1..height).random()
                 var count = 0
                 for (k in array.indices) {
-                    if (array[k][0] == randomX && array[k][1] == randomY) {
+                    if ((array[k][0] == randomX && array[k][1] == randomY) || (array[k][0] == startPosX && array[k][1] == startPosY)) {
                         count += 1
                     }
                 }
