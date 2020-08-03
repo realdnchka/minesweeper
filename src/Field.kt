@@ -10,7 +10,7 @@ class Field(private var height: Int, private var width: Int, private var countOf
     fun buildField() {
         for (i in arrayOfCell.indices)
             for (j in arrayOfCell[i].indices) {
-                arrayOfCell[i][j] = EmptyCell(j + 1, i + 1)
+                arrayOfCell[i][j] = NumberCell(j + 1, i + 1)
             }
         for (i in minePos.indices) {
             val posX = minePos[i][0]
@@ -29,17 +29,12 @@ class Field(private var height: Int, private var width: Int, private var countOf
         }
     }
 
-    fun checkCell(x: Int, y: Int) {
-        val cell = arrayOfCell[y - 1][x - 1]
-        cell.check()
-    }
-
     private fun minesAround() {
         for (i in arrayOfCell.indices) {
             for (j in arrayOfCell[i].indices) {
                 val cell = arrayOfCell[i][j]
                 var count = 0
-                if (cell is EmptyCell) {
+                if (cell is NumberCell) {
                     val x = j + 1
                     val y = i + 1
                     val leftMine = if (x - 1 == 0) '0' else arrayOfCell[i][j - 1]
